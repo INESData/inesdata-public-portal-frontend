@@ -36,3 +36,7 @@ Run it locally by using the env.list with environment:
 ```
 docker run --name inesdata-public-portal-frontend -p 80:80  --env-file ./docker/env-localhost/env.list -d upm-inesdata/inesdata-public-portal-frontend:0.1.0
 ```
+
+## Disclaimer
+
+Este trabajo ha recibido financiación del proyecto INESData (Infraestructura para la INvestigación de ESpacios de DAtos distribuidos en UPM), un proyecto financiado en el contexto de la convocatoria UNICO I+D CLOUD del Ministerio para la Transformación Digital y de la Función Pública en el marco del PRTR financiado por Unión Europea (NextGenerationEU)
