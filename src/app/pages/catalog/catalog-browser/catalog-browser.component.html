@@ -8,7 +8,7 @@
   </header>
 
   <div class="catalog-body">
-    <aside class="sidebar">
+    <aside class="sidebar" *ngIf="schemas.length > 0">
 			<h5>Vocabularios</h5>
 			<form>
 				<div *ngFor="let schema of schemas; let i = index" style="margin-bottom: 20px;">
