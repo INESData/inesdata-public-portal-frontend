@@ -61,6 +61,7 @@ button {
 	align-items: flex-end;
 
 	&__container {
+		width: 100%;
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		grid-gap: 50px;
