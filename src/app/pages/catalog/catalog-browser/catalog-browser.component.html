@@ -13,14 +13,14 @@
 			<form>
 				<div *ngFor="let schema of schemas; let i = index" style="margin-bottom: 20px;">
 					<p-accordion [multiple]="false">
-						<p-accordionTab [header]="vocabulariesDefinition[i].name">
+						<p-accordionTab [header]="vocabulariesDefinition[i].name" iconPos="end">
 							<div [formGroup]="forms[i]">
 								<div *ngFor="let key of getKeys(schema.properties)">
 									<ng-container [ngSwitch]="schema.properties[key].type">
 										<div *ngSwitchCase="'array'">
 											<div *ngIf="schema.properties[key].items.type === 'object'" class="grey">
 												<p-accordion [multiple]="false">
-													<p-accordionTab [header]="schema.properties[key].title || schema.properties[key].split(':').pop()">
+													<p-accordionTab [header]="schema.properties[key].title || schema.properties[key].split(':').pop()" iconPos="end">
 														<div *ngFor="let subKey of getKeys(schema.properties[key].items.properties)">
 															<label>{{ schema.properties[key].items.properties[subKey].title || subKey.split(':').pop() }}</label>
 															<ng-container [ngSwitch]="subKey.format">
@@ -56,7 +56,7 @@
 										<div *ngSwitchCase="'object'" class="grey">
 
 											<p-accordion [multiple]="false">
-												<p-accordionTab [header]="schema.properties[key].title || schema.properties[key].split(':').pop()">
+												<p-accordionTab [header]="schema.properties[key].title || schema.properties[key].split(':').pop()" iconPos="end">
 													<div *ngFor="let subKey of getKeys(schema.properties[key].properties)">
 														<label>{{ schema.properties[key].properties[subKey].title || subKey.split(':').pop() }}</label>
 														<ng-container [ngSwitch]="subKey.format">
