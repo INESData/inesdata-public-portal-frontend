@@ -62,7 +62,7 @@
         <ng-container *ngIf="item.isArray; else objectOrPlainValue">
           <ng-container *ngIf="containsOnlyObjects(item.value); else simpleList">
             <p-accordion [multiple]="true">
-              <p-accordionTab [header]="item.key">
+              <p-accordionTab [header]="item.key" iconPos="end">
                 <div class="details">
                   <ng-container *ngFor="let subItem of item.value">
                     <div class="detail-item">
@@ -78,7 +78,7 @@
             </p-accordion>
           </ng-container>
           <ng-template #simpleList>
-            <span class="detail-title-inline">{{ item.key }}:</span>
+            <span class="detail-title-inline">{{ item.key }}: </span>
             <ul>
               <li *ngFor="let subItem of item.value">
                 <ng-container *ngIf="!isObject(subItem)">
@@ -91,7 +91,7 @@
         <ng-template #objectOrPlainValue>
           <ng-container *ngIf="item.isObject; else plainValue">
             <p-accordion [multiple]="false">
-              <p-accordionTab [header]="item.key">
+              <p-accordionTab [header]="item.key" iconPos="end">
                 <ng-container *ngFor="let subEntry of item.entries">
                   <div>
                     <span class="detail-title-inline">{{ subEntry.key }}: </span> <span class="detail-value-inline">{{ subEntry.value }}</span>
@@ -102,7 +102,7 @@
           </ng-container>
           <ng-template #plainValue>
             <div>
-              <span class="detail-title-inline">{{ item.key }}:</span> <span class="detail-value-inline">{{ item.value }}</span>
+              <span class="detail-title-inline">{{ item.key }}: </span> <span class="detail-value-inline">{{ item.value }}</span>
             </div>
           </ng-template>
         </ng-template>
