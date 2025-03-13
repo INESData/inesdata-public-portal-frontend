@@ -1,23 +1,26 @@
-import { Component, OnInit, Renderer2, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer2, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { GenericPageService } from '../../shared/services/generic-page.service';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 import { filter, switchMap } from 'rxjs/operators';
 import { MenuService } from '../../shared/services/menu.service';
 import { LoadMenuStatusService } from 'src/app/shared/services/load-menu-status.service';
-import { of } from 'rxjs';
+import { of, Subscription } from 'rxjs';
 
 @Component({
 	selector: 'app-generic-page',
 	templateUrl: './generic-page.component.html',
 	styleUrls: ['./generic-page.component.scss']
 })
-export class GenericPageComponent implements OnInit {
+export class GenericPageComponent implements OnInit, OnDestroy {
 
 	title: string;
 	content: string;
 	id: string;
 	menu: any;
 	slug: string;
+
+	styleElements: HTMLStyleElement[] = [];
+	routerSubscription: Subscription;
 
 	@ViewChild('contentContainer', { static: true }) contentContainer: ElementRef;
 
@@ -31,7 +34,6 @@ export class GenericPageComponent implements OnInit {
 	) { }
 
 	ngOnInit() {
-
 		this.activatedRoute.paramMap.pipe(
 			switchMap(params => {
 				this.slug = String(params.get('title'));
@@ -45,13 +47,14 @@ export class GenericPageComponent implements OnInit {
 			}
 		});
 
-		this.router.events.pipe(
+		this.routerSubscription = this.router.events.pipe(
 			filter(event => event instanceof NavigationEnd)
 		).subscribe(() => {
+			this.clearOldStyles();
 			this.getContentByUrl();
 		});
-
 	}
+
 	getContentByUrl() {
 		this.menu = this.menuService.mainMenu;
 
@@ -71,7 +74,6 @@ export class GenericPageComponent implements OnInit {
 		this.genericPageService.getGenericPageContent(id)
 			.subscribe(result => {
 				this.title = result.title;
-
 				const htmlContent = result.content.replace(/\n/g, '');
 
 				this.injectHTML(htmlContent);
@@ -95,7 +97,23 @@ export class GenericPageComponent implements OnInit {
 	appendStylesToHead(cssContent: string) {
 		const styleElement = this.renderer.createElement('style');
 		this.renderer.appendChild(styleElement, this.renderer.createText(cssContent));
-
 		this.renderer.appendChild(document.head, styleElement);
+		this.styleElements.push(styleElement);
+	}
+
+	clearOldStyles() {
+		this.styleElements.forEach(styleElement => {
+			if (document.head.contains(styleElement)) {
+				this.renderer.removeChild(document.head, styleElement);
+			}
+		});
+		this.styleElements = [];
+	}
+
+	ngOnDestroy() {
+		this.clearOldStyles();
+		if (this.routerSubscription) {
+			this.routerSubscription.unsubscribe();
+		}
 	}
 }
